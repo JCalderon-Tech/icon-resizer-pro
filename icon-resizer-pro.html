@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; img-src 'self' data: blob:">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
+  <title>Advanced Icon & Image Resizer Suite PRO</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            nexus: {
+              bg: 'rgb(var(--nx-bg) / <alpha-value>)',
+              surface: 'rgb(var(--nx-surface) / <alpha-value>)',
+              surfaceHover: 'rgb(var(--nx-surface-hover) / <alpha-value>)',
+              border: 'rgb(var(--nx-border) / <alpha-value>)',
+              cyan: 'rgb(var(--nx-cyan) / <alpha-value>)',
+              orange: 'rgb(var(--nx-orange) / <alpha-value>)',
+              matrix: 'rgb(var(--nx-matrix) / <alpha-value>)',
+              muted: 'rgb(var(--nx-muted) / <alpha-value>)',
+              text: 'rgb(var(--nx-text) / <alpha-value>)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"
+    integrity="sha384-uTYyvsSSUZeaPhb5RbKlQa0zY/WpX/QHfvg2mczXyBQOpkWPEDy9lczyp+w7SKXu"
+    crossorigin="anonymous"></script>
+  <style>
+    :root,
+    html.dark {
+      --nx-bg: 10 11 16;
+      --nx-surface: 19 21 29;
+      --nx-surface-hover: 28 31 43;
+      --nx-border: 42 46 61;
+      --nx-cyan: 112 226 230;
+      --nx-orange: 255 149 64;
+      --nx-matrix: 0 255 65;
+      --nx-muted: 176 186 199;
+      --nx-text: 230 237 243;
+    }
+
+    html.light {
+      --nx-bg: 246 248 251;
+      --nx-surface: 255 255 255;
+      --nx-surface-hover: 238 241 245;
+      --nx-border: 213 218 226;
+      --nx-cyan: 14 116 124;
+      --nx-orange: 178 76 0;
+      --nx-matrix: 5 122 39;
+      --nx-muted: 85 95 107;
+      --nx-text: 22 26 33;
+    }
+
+    @media (prefers-contrast: more) {
+
+      :root,
+      html.dark {
+        --nx-muted: 214 222 231;
+        --nx-border: 90 100 118;
+      }
+
+      html.light {
+        --nx-muted: 32 40 50;
+        --nx-border: 120 132 150;
+      }
+    }
+
+    @media (forced-colors: active) {
+
+      .nx-btn,
+      .fit-btn,
+      button,
+      select,
+      input[type="range"] {
+        forced-color-adjust: auto;
+      }
+
+      #crop-overlay {
+        border-color: Highlight;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+      }
+    }
+
+    html {
+      scrollbar-gutter: stable;
+    }
+
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background-color: rgb(var(--nx-bg));
+      color: rgb(var(--nx-text));
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+    }
+
+    .cyber-glow {
+      box-shadow: 0 0 20px rgb(var(--nx-cyan) / 0.15);
+    }
+
+    .cyber-border {
+      border: 1px solid rgb(var(--nx-border));
+    }
+
+    .cyber-border:focus-within {
+      border-color: rgb(var(--nx-cyan));
+      box-shadow: 0 0 10px rgb(var(--nx-cyan) / 0.3);
+    }
+
+    button,
+    input,
+    select,
+    label,
+    [role="button"],
+    [role="radio"] {
+      touch-action: manipulation;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgb(var(--nx-bg));
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgb(var(--nx-border));
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgb(var(--nx-cyan));
+    }
+
+    :focus-visible {
+      outline: 2px solid rgb(var(--nx-cyan));
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .checkerboard {
+      background-color: rgb(var(--nx-surface-hover));
+      background-image:
+        linear-gradient(45deg, rgb(var(--nx-border)) 25%, transparent 25%),
+        linear-gradient(-45deg, rgb(var(--nx-border)) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgb(var(--nx-border)) 75%),
+        linear-gradient(-45deg, transparent 75%, rgb(var(--nx-border)) 75%);
+      background-size: 12px 12px;
+      background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+    }
+
+    @keyframes nx-toast-in {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes nx-toast-out {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+      }
+    }
+
+    .toast {
+      animation: nx-toast-in 0.22s ease-out;
+    }
+
+    .toast.removing {
+      animation: nx-toast-out 0.18s ease-in forwards;
+    }
+
+    button:disabled,
+    [aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    input[type="range"]:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .nx-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: nx-spin 0.8s linear infinite;
+    }
+
+    @keyframes nx-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    html.light .nx-spinner {
+      border-color: rgba(0, 0, 0, 0.2);
+      border-top-color: currentColor;
+    }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    dialog {
+      background: transparent;
+      border: none;
+      padding: 0;
+      max-width: 92vw;
+    }
+
+    @media (max-width: 380px) {
+      #logo-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+      }
+    }
+
+    .nx-btn {
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
+    }
+
+    .nx-btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .fit-btn {
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .fit-btn[aria-checked="true"] {
+      background-color: rgb(var(--nx-surface-hover));
+      color: rgb(var(--nx-cyan));
+    }
+
+    .fit-btn[aria-checked="false"] {
+      color: rgb(var(--nx-muted));
+    }
+
+    .fit-btn[aria-checked="false"]:hover {
+      background-color: rgb(var(--nx-surface-hover));
+    }
+
+    #crop-overlay {
+      transition: left 120ms ease, top 120ms ease, width 120ms ease, height 120ms ease, border-style 0ms;
+    }
+
+    /* Preview original compacto: tamaño fijado por JS vía variables CSS */
+    #original-preview-wrapper {
+      width: var(--preview-w, 320px);
+      max-width: 100%;
+      aspect-ratio: var(--preview-ar, 1);
+    }
+
+    #preview-original {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 0.5rem;
+      z-index: 9999;
+      background: rgb(var(--nx-cyan));
+      color: rgb(var(--nx-bg));
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: top 0.2s ease;
+    }
+
+    .skip-link:focus {
+      top: 0.5rem;
+    }
+
+    #header-actions-panel {
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    #header-actions-panel[hidden] {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-nexus-cyan selection:text-nexus-bg">
+
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="border-b border-nexus-border bg-nexus-surface/80 backdrop-blur-md sticky top-0 z-50 px-4 lg:px-8 py-3">
+    <div class="flex items-center justify-between gap-3 flex-wrap">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-3 h-3 bg-nexus-cyan rounded-full animate-pulse shadow-[0_0_10px_#70E2E6] flex-shrink-0"
+          aria-hidden="true"></div>
+        <h1 id="logo-title"
+          class="font-mono font-bold tracking-wider text-base sm:text-lg lg:text-xl text-nexus-cyan flex items-center gap-2 min-w-0">
+          <span class="truncate">icon-resizer-pro</span>
+          <span
+            class="text-xs px-2 py-0.5 rounded bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30 flex-shrink-0">v3.0
+            PRO</span>
+        </h1>
+      </div>
+
+      <button id="btn-header-toggle" type="button"
+        class="md:hidden nx-btn p-2.5 min-h-[44px] min-w-[44px] rounded-md bg-nexus-surfaceHover border border-nexus-border text-nexus-muted hover:border-nexus-cyan hover:text-nexus-cyan inline-flex items-center justify-center"
+        aria-label="Abrir menú de acciones" aria-expanded="false" aria-controls="header-actions-panel"
+        aria-haspopup="true">
+        <i data-lucide="menu" class="w-5 h-5" id="icon-header-menu"></i>
+      </button>
+
+      <nav id="header-actions-panel" aria-label="Acciones de cabecera" class="w-full md:w-auto md:flex md:items-center md:gap-2
+                  hidden md:!flex flex-col md:flex-row gap-2
+                  mt-2 md:mt-0 text-xs font-mono text-nexus-muted" hidden>
+        <button id="btn-shortcuts" type="button" title="Ver atajos de teclado" aria-label="Ver atajos de teclado"
+          class="nx-btn p-2.5 min-h-[44px] min-w-[44px] rounded-md bg-nexus-surfaceHover border border-nexus-border text-nexus-muted hover:border-nexus-cyan hover:text-nexus-cyan inline-flex items-center justify-center self-start md:self-auto">
+          <i data-lucide="keyboard" class="w-4 h-4"></i>
+        </button>
+        <button id="btn-theme" type="button" title="Cambiar entre tema claro y oscuro"
+          aria-label="Cambiar entre tema claro y oscuro" aria-pressed="false"
+          class="nx-btn p-2.5 min-h-[44px] min-w-[44px] rounded-md bg-nexus-surfaceHover border border-nexus-border text-nexus-muted hover:border-nexus-cyan hover:text-nexus-cyan inline-flex items-center justify-center self-start md:self-auto">
+          <i data-lucide="moon" id="icon-theme-dark" class="w-4 h-4"></i>
+          <i data-lucide="sun" id="icon-theme-light" class="w-4 h-4 hidden"></i>
+        </button>
+        <span class="hidden sm:inline self-center">SYS_STATUS: <strong class="text-nexus-matrix">ONLINE</strong></span>
+        <button id="btn-clear-data" type="button" title="Borra las preferencias y la imagen guardada en este navegador"
+          class="nx-btn px-3 py-2.5 min-h-[44px] rounded-md bg-nexus-surfaceHover border border-nexus-border text-nexus-muted hover:border-red-500 hover:text-red-400 inline-flex items-center self-start md:self-auto">BORRAR
+          DATOS</button>
+        <span id="storage-status" role="status" aria-live="polite"
+          class="hidden lg:inline self-center px-2 py-1 rounded bg-nexus-surfaceHover border border-nexus-border text-nexus-cyan">LOCAL
+          PERSISTENCE ACTIVE</span>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="flex-grow container mx-auto px-4 lg:px-8 py-8 max-w-7xl">
+
+    <section class="mb-8">
+      <div id="dropzone"
+        class="border-2 border-dashed border-nexus-border rounded-2xl p-8 lg:p-12 text-center bg-nexus-surface/50 hover:bg-nexus-surface transition-all duration-300 cursor-pointer relative group cyber-glow">
+        <input type="file" id="file-input" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+          accept="image/png, image/jpeg, image/svg+xml, image/webp, image/x-icon, image/vnd.microsoft.icon"
+          aria-label="Seleccionar imagen o icono">
+        <div class="flex flex-col items-center justify-center space-y-4 pointer-events-none">
+          <div
+            class="w-16 h-16 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan group-hover:scale-110 transition-transform">
+            <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h2 class="text-lg lg:text-xl font-bold text-nexus-text mb-1">Arrastra tu imagen, icono o archivo aquí</h2>
+            <p class="text-sm text-nexus-muted">Soporta PNG, JPG, SVG, WebP, ICO (Hasta 256px+)</p>
+            <p class="text-xs text-nexus-muted mt-1">También puedes pulsar <kbd
+                class="px-1.5 py-0.5 rounded bg-nexus-surfaceHover border border-nexus-border font-mono text-[10px]">Ctrl/Cmd
+                + O</kbd> para abrir</p>
+          </div>
+          <button type="button"
+            class="px-5 py-2.5 min-h-[44px] rounded-xl bg-nexus-cyan text-nexus-bg font-semibold text-sm shadow-lg hover:bg-nexus-cyan/90 transition-colors pointer-events-auto nx-btn">
+            Explorar Archivos
+          </button>
+        </div>
+      </div>
+      <p id="app-message" role="alert" class="hidden mt-3 text-sm text-nexus-orange font-mono"></p>
+    </section>
+
+    <div id="workspace" class="grid grid-cols-1 lg:grid-cols-3 gap-8 hidden">
+
+      <!-- Imagen original + zona de recorte (versión compacta y colapsable) -->
+      <section class="lg:col-span-3 bg-nexus-surface cyber-border rounded-2xl p-3 sm:p-4 space-y-2"
+        aria-labelledby="original-preview-title">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <h3 id="original-preview-title"
+            class="font-mono font-bold text-nexus-text text-sm sm:text-base flex items-center gap-2">
+            <i data-lucide="image" class="w-4 h-4 text-nexus-cyan"></i> Imagen original y zona de recorte
+          </h3>
+          <div class="flex items-center gap-2">
+            <span id="original-preview-hint" class="hidden sm:inline text-[11px] font-mono text-nexus-muted">El recuadro
+              cian es lo que se exportará</span>
+            <button id="btn-toggle-original-preview" type="button" aria-expanded="true"
+              aria-controls="original-preview-body"
+              class="nx-btn inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[32px] rounded-md bg-nexus-surfaceHover border border-nexus-border text-nexus-muted hover:border-nexus-cyan hover:text-nexus-cyan text-[11px] font-mono">
+              <i data-lucide="chevron-up" id="icon-toggle-original" class="w-3.5 h-3.5"></i>
+              <span id="btn-toggle-original-label">Ocultar</span>
+            </button>
+          </div>
+        </div>
+        <div id="original-preview-body" class="space-y-2">
+          <div id="original-preview-wrapper"
+            class="relative mx-auto rounded-lg border border-nexus-border/60 overflow-hidden bg-nexus-bg">
+            <img id="preview-original" src="" alt="Imagen original completa con la zona de recorte resaltada">
+            <div id="crop-overlay" class="absolute border-2 border-nexus-cyan pointer-events-none"
+              style="box-shadow: 0 0 0 9999px rgba(10,11,16,0.6);" aria-hidden="true"></div>
+          </div>
+          <p id="original-preview-note" class="text-[11px] text-nexus-muted text-center max-w-md mx-auto">
+            Los iconos deben ser cuadrados (1:1). Si tu imagen es rectangular, se recorta a un cuadrado: la parte que
+            quede fuera del recuadro cian no se incluye en el icono exportado. Mueve <strong>X</strong> /
+            <strong>Y</strong> / <strong>Zoom</strong> para ajustar, o cambia a <strong>Ajustar</strong> para no perder
+            nada.
+          </p>
+        </div>
+      </section>
+
+      <div class="lg:col-span-2 space-y-6">
+
+        <div class="bg-nexus-surface cyber-border rounded-2xl p-6 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="font-mono font-bold text-nexus-text text-base flex items-center gap-2">
+                <i data-lucide="sliders" class="w-4 h-4 text-nexus-cyan"></i> Controles, CROP y Filtros
+              </h3>
+              <p class="text-xs text-nexus-muted mt-0.5">Ajusta el recorte 1:1, brillo, contraste y nitidez en tiempo
+                real</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btn-undo" type="button" disabled title="Deshacer (Ctrl/Cmd + Z)"
+                aria-label="Deshacer último cambio"
+                class="nx-btn p-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-nexus-surfaceHover border border-nexus-border text-nexus-text hover:border-nexus-cyan inline-flex items-center justify-center">
+                <i data-lucide="undo-2" class="w-4 h-4"></i>
+              </button>
+              <button id="btn-redo" type="button" disabled title="Rehacer (Ctrl/Cmd + Shift + Z)"
+                aria-label="Rehacer cambio"
+                class="nx-btn p-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-nexus-surfaceHover border border-nexus-border text-nexus-text hover:border-nexus-cyan inline-flex items-center justify-center">
+                <i data-lucide="redo-2" class="w-4 h-4"></i>
+              </button>
+              <button id="btn-select-all" type="button"
+                class="nx-btn px-3 py-2.5 min-h-[44px] rounded-lg bg-nexus-surfaceHover border border-nexus-border text-xs text-nexus-text hover:border-nexus-cyan">Seleccionar
+                Todo</button>
+              <button id="btn-reset-matrix" type="button"
+                class="nx-btn px-3 py-2.5 min-h-[44px] rounded-lg bg-nexus-surfaceHover border border-nexus-border text-xs text-red-400 hover:border-red-500">Restablecer</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-nexus-border">
+
+            <div class="space-y-3 bg-nexus-bg p-4 rounded-xl border border-nexus-border/60">
+              <span class="font-mono text-xs text-nexus-cyan uppercase block flex items-center gap-1.5">
+                <i data-lucide="crop" class="w-3.5 h-3.5"></i> Modo de ajuste y recorte
+              </span>
+
+              <div class="flex rounded-lg border border-nexus-border overflow-hidden" role="radiogroup"
+                aria-label="Modo de ajuste de la imagen">
+                <button type="button" data-fit="cover" role="radio" aria-checked="true"
+                  class="fit-btn flex-1 px-3 py-2.5 min-h-[44px] text-xs font-mono">Recortar 1:1</button>
+                <button type="button" data-fit="contain" role="radio" aria-checked="false"
+                  class="fit-btn flex-1 px-3 py-2.5 min-h-[44px] text-xs font-mono border-l border-nexus-border">Ajustar
+                  (contain)</button>
+              </div>
+              <p id="fit-mode-hint" class="text-[11px] text-nexus-muted leading-snug">
+                <strong>Recortar:</strong> escoge un cuadrado de la imagen. <strong>Ajustar:</strong> usa toda la imagen
+                y añade relleno transparente. Los sliders X / Y / Zoom funcionan en ambos modos.
+              </p>
+
+              <div class="space-y-2" id="crop-sliders-group">
+                <div>
+                  <div class="flex justify-between text-xs text-nexus-muted mb-1">
+                    <span>Posición X (%)</span>
+                    <span id="val-crop-x">50%</span>
+                  </div>
+                  <input type="range" id="range-crop-x" aria-label="Posición horizontal"
+                    title="En Recortar: desplaza el recorte. En Ajustar: desplaza la imagen dentro del relleno" min="0"
+                    max="100" value="50" class="w-full accent-nexus-cyan">
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-nexus-muted mb-1">
+                    <span>Posición Y (%)</span>
+                    <span id="val-crop-y">50%</span>
+                  </div>
+                  <input type="range" id="range-crop-y" aria-label="Posición vertical"
+                    title="En Recortar: desplaza el recorte. En Ajustar: desplaza la imagen dentro del relleno" min="0"
+                    max="100" value="50" class="w-full accent-nexus-cyan">
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-nexus-muted mb-1">
+                    <span>Zoom / Escala</span>
+                    <span id="val-crop-zoom">100%</span>
+                  </div>
+                  <input type="range" id="range-crop-zoom" aria-label="Zoom"
+                    title="En Recortar: tamaño del cuadrado. En Ajustar: escala de la imagen (más bajo = más relleno)"
+                    min="50" max="100" value="100" class="w-full accent-nexus-cyan">
+                </div>
+                <button type="button" id="btn-center-crop" title="Restaura X=50%, Y=50% (centrado)"
+                  class="text-[11px] font-mono text-nexus-cyan hover:underline min-h-[32px] px-2 rounded">Centrar
+                  (X=50%, Y=50%)</button>
+              </div>
+            </div>
+
+            <div class="space-y-3 bg-nexus-bg p-4 rounded-xl border border-nexus-border/60">
+              <span class="font-mono text-xs text-nexus-orange uppercase block flex items-center gap-1.5">
+                <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Filtros de Nitidez y Color
+              </span>
+              <div class="space-y-2">
+                <div>
+                  <div class="flex justify-between text-xs text-nexus-muted mb-1">
+                    <span>Brillo</span>
+                    <span id="val-brightness">100%</span>
+                  </div>
+                  <input type="range" id="range-brightness" aria-label="Brillo" title="Ajusta el brillo del icono"
+                    min="50" max="150" value="100" class="w-full accent-nexus-orange">
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-nexus-muted mb-1">
+                    <span>Contraste</span>
+                    <span id="val-contrast">100%</span>
+                  </div>
+                  <input type="range" id="range-contrast" aria-label="Contraste" title="Ajusta el contraste del icono"
+                    min="50" max="150" value="100" class="w-full accent-nexus-orange">
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-nexus-muted mb-1">
+                    <span>Filtro de Nitidez (Sharpen)</span>
+                    <span id="val-sharpen">Desactivado</span>
+                  </div>
+                  <input type="range" id="range-sharpen" aria-label="Nivel de nitidez"
+                    title="Aumenta la nitidez en los bordes; útil tras reducir imágenes" min="0" max="2" value="0"
+                    step="1" class="w-full accent-nexus-orange">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <p id="size-note" class="text-xs text-nexus-muted font-mono" role="status" aria-live="polite"></p>
+        <div id="size-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+
+        <div
+          class="bg-nexus-surface cyber-border rounded-2xl p-6 flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <div
+              class="w-10 h-10 rounded-xl bg-nexus-orange/10 border border-nexus-orange/30 flex items-center justify-center text-nexus-orange"
+              aria-hidden="true">
+              <i data-lucide="package" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <label for="export-format" class="text-xs text-nexus-muted block">FORMATO DE SALIDA</label>
+              <select id="export-format" aria-label="Formato de salida"
+                class="bg-nexus-bg border border-nexus-border text-nexus-text text-sm rounded-lg px-3 py-2 mt-1 outline-none focus:border-nexus-cyan font-mono min-h-[44px]">
+                <option value="ico">Archivo Único (.ICO máxima calidad · todos los tamaños)</option>
+                <option value="png">Archivos PNG (ZIP)</option>
+              </select>
+            </div>
+          </div>
+          <label class="flex flex-col text-[11px] text-nexus-muted font-mono w-full sm:w-auto">
+            NOMBRE DE ARCHIVO
+            <input id="export-name" type="text" value="icon" maxlength="60" autocomplete="off" spellcheck="false"
+              aria-describedby="export-name-hint"
+              class="bg-nexus-bg border border-nexus-border text-nexus-text text-sm rounded-lg px-3 py-2 mt-1 outline-none focus:border-nexus-cyan font-mono min-h-[44px]">
+            <span id="export-name-hint" class="text-[10px] text-nexus-muted mt-1 h-3" aria-live="polite"></span>
+          </label>
+          <button id="btn-copy-html" type="button"
+            title="Copia el fragmento <link rel='icon'> para pegar en tu sitio web"
+            class="nx-btn w-full sm:w-auto px-4 py-3 min-h-[44px] rounded-xl bg-nexus-surfaceHover border border-nexus-border text-nexus-cyan font-semibold text-sm hover:border-nexus-cyan inline-flex items-center justify-center gap-2">
+            <i data-lucide="code-2" class="w-4 h-4"></i> Copiar HTML favicon
+          </button>
+          <button id="btn-export" type="button" aria-busy="false"
+            class="nx-btn w-full sm:w-auto px-6 py-3 min-h-[44px] rounded-xl bg-gradient-to-r from-nexus-cyan to-blue-500 text-white font-bold text-sm shadow-xl hover:opacity-90 inline-flex items-center justify-center gap-2">
+            <i data-lucide="download" id="icon-export-normal" class="w-4 h-4"></i>
+            <span id="export-spinner" class="nx-spinner hidden" aria-hidden="true"></span>
+            <span id="btn-export-label">Generar y Descargar</span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-nexus-surface cyber-border rounded-2xl p-6 sticky top-24">
+          <h3 class="font-mono font-bold text-nexus-text text-base mb-4 flex items-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4 text-nexus-cyan"></i> Previsualización en Vivo
+          </h3>
+
+          <div class="space-y-4">
+            <div class="bg-nexus-bg rounded-xl border border-nexus-border p-3">
+              <span class="text-[11px] uppercase font-mono text-nexus-muted block mb-2">Pestaña del Navegador
+                (16px)</span>
+              <div
+                class="bg-nexus-surfaceHover rounded-lg p-2 flex items-center gap-2 border border-nexus-border/50 max-w-[220px]">
+                <img id="preview-tab" src="" class="w-4 h-4 object-contain"
+                  alt="Vista previa del favicon en la pestaña del navegador">
+                <span class="text-xs text-nexus-text truncate font-mono">Dashboard Nexus</span>
+                <span class="text-xs text-nexus-muted ml-auto" aria-hidden="true">×</span>
+              </div>
+            </div>
+
+            <div class="bg-nexus-bg rounded-xl border border-nexus-border p-3">
+              <span class="text-[11px] uppercase font-mono text-nexus-muted block mb-2">Barra de Tareas / Dock
+                (32px)</span>
+              <div class="bg-nexus-surface rounded-lg p-3 flex items-center gap-4 border border-nexus-border/50">
+                <div class="relative group">
+                  <img id="preview-taskbar" src="" class="w-8 h-8 object-contain rounded drop-shadow-md"
+                    alt="Vista previa del icono en la barra de tareas">
+                  <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-nexus-cyan rounded-full"
+                    aria-hidden="true"></div>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-xs font-semibold text-nexus-text">Nexus_Engine.exe</span>
+                  <span class="text-[11px] text-nexus-muted">Ejecutándose en segundo plano</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="bg-nexus-bg rounded-xl border border-nexus-border p-6 text-center flex flex-col items-center justify-center">
+              <span class="text-[11px] uppercase font-mono text-nexus-muted block mb-4">Vista Escala Máxima
+                (256px)</span>
+              <div
+                class="w-24 h-24 rounded-2xl checkerboard flex items-center justify-center border border-nexus-border shadow-inner p-2 relative overflow-hidden">
+                <img id="preview-main" src="" class="max-w-full max-h-full object-contain"
+                  alt="Previsualización principal del icono a 256 píxeles">
+              </div>
+              <p class="text-[10px] text-nexus-muted mt-2">Fondo de tablero para verificar transparencia</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <section id="env-section" class="lg:col-span-3 bg-nexus-surface cyber-border rounded-2xl p-6 space-y-6"
+        aria-labelledby="env-title">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 id="env-title" class="font-mono font-bold text-nexus-text text-base flex items-center gap-2">
+              <i data-lucide="monitor" class="w-4 h-4 text-nexus-cyan"></i> Simulador de Barra de Tareas y Explorador
+            </h3>
+            <p class="text-xs text-nexus-muted mt-0.5">Así se ve tu icono junto a otras apps y como archivo .exe, usando
+              la entrada .ico que Windows elegiría</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
+            <label class="flex items-center gap-2 text-nexus-muted">Tamaño en barra
+              <select id="env-taskbar-size"
+                class="bg-nexus-bg border border-nexus-border text-nexus-text rounded-lg px-2 py-2 outline-none focus:border-nexus-cyan min-h-[44px]">
+                <option value="16">16 px · botones pequeños</option>
+                <option value="24" selected>24 px · Windows 11 (100 %)</option>
+                <option value="32">32 px · Windows 10 (100 %)</option>
+                <option value="48">48 px · pantallas HiDPI</option>
+              </select>
+            </label>
+            <label class="flex items-center gap-2 text-nexus-muted">Tema
+              <select id="env-theme"
+                class="bg-nexus-bg border border-nexus-border text-nexus-text rounded-lg px-2 py-2 outline-none focus:border-nexus-cyan min-h-[44px]">
+                <option value="dark" selected>Oscuro</option>
+                <option value="light">Claro</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <span class="text-[11px] font-mono uppercase text-nexus-muted">Barra de tareas</span>
+          <div id="env-taskbar"></div>
+          <p id="env-taskbar-note" class="text-[11px] font-mono text-nexus-muted" role="status" aria-live="polite"></p>
+        </div>
+        <div class="space-y-2">
+          <span class="text-[11px] font-mono uppercase text-nexus-muted">Explorador de archivos (Nexus_Engine.exe junto
+            a otros archivos)</span>
+          <div id="env-explorer" class="space-y-4"></div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer
+    class="border-t border-nexus-border bg-nexus-surface/50 py-4 px-4 text-center text-xs text-nexus-muted font-mono space-y-2">
+    <p>NEXUS_CALDERON ARCHITECTURE &copy; 2026 — Secure Client-Side Execution Engine.</p>
+    <p class="flex items-center justify-center gap-2 flex-wrap">
+      <button id="btn-telemetry" type="button"
+        class="nx-btn inline-flex items-center gap-1.5 px-3 py-2 min-h-[36px] rounded-md bg-nexus-surfaceHover border border-nexus-border hover:border-nexus-cyan hover:text-nexus-cyan"
+        aria-pressed="false">
+        <i data-lucide="activity" class="w-3.5 h-3.5" aria-hidden="true"></i>
+        <span id="telemetry-label">Telemetría local: Apagada</span>
+      </button>
+      <span class="text-[10px] opacity-75">(opt-in · sólo se guarda en tu navegador)</span>
+    </p>
+  </footer>
+
+  <div id="toast-container" aria-live="polite" aria-atomic="false"
+    class="fixed bottom-4 right-4 z-[60] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2rem)]"></div>
+
+  <dialog id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+    <div class="bg-nexus-surface border border-nexus-border rounded-2xl p-6 max-w-md w-full shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h2 id="shortcuts-title" class="font-mono font-bold text-nexus-text text-lg flex items-center gap-2">
+          <i data-lucide="keyboard" class="w-5 h-5 text-nexus-cyan"></i> Atajos de teclado
+        </h2>
+        <button type="button" id="btn-close-shortcuts" aria-label="Cerrar"
+          class="nx-btn p-2.5 min-h-[44px] min-w-[44px] rounded-md text-nexus-muted hover:text-nexus-text hover:bg-nexus-surfaceHover">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <table class="w-full text-sm text-nexus-text">
+        <tbody class="divide-y divide-nexus-border">
+          <tr>
+            <td class="py-2 pr-3 font-mono text-nexus-cyan whitespace-nowrap">Ctrl/Cmd + O</td>
+            <td class="py-2">Abrir imagen</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 font-mono text-nexus-cyan whitespace-nowrap">Ctrl/Cmd + E</td>
+            <td class="py-2">Exportar archivo</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 font-mono text-nexus-cyan whitespace-nowrap">Ctrl/Cmd + Z</td>
+            <td class="py-2">Deshacer último ajuste</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 font-mono text-nexus-cyan whitespace-nowrap">Ctrl/Cmd + Shift + Z</td>
+            <td class="py-2">Rehacer ajuste</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 font-mono text-nexus-cyan whitespace-nowrap">?</td>
+            <td class="py-2">Mostrar esta ayuda</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 font-mono text-nexus-cyan whitespace-nowrap">Esc</td>
+            <td class="py-2">Cerrar diálogos</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="text-xs text-nexus-muted mt-4">Los atajos funcionan cuando el foco no está en un campo de texto.</p>
+    </div>
+  </dialog>
+
+  <script>
+    try { lucide.createIcons(); } catch (e) { console.warn('Lucide no disponible; se continúa sin iconos.', e); }
+
+    /* PURE_START — funciones puras (sin DOM), verificables de forma aislada */
+    const CRC_TABLE = (() => {
+      const t = new Uint32Array(256);
+      for (let n = 0; n < 256; n++) {
+        let c = n;
+        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        t[n] = c >>> 0;
+      }
+      return t;
+    })();
+
+    function crc32(bytes) {
+      let c = 0xFFFFFFFF;
+      for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+      return (c ^ 0xFFFFFFFF) >>> 0;
+    }
+
+    function concatBytes(chunks) {
+      const out = new Uint8Array(chunks.reduce((s, c) => s + c.length, 0));
+      let off = 0;
+      chunks.forEach(c => { out.set(c, off); off += c.length; });
+      return out;
+    }
+
+    function computeCrop(imgW, imgH, crop) {
+      const side = Math.min(imgW, imgH) * (crop.zoom / 100);
+      return { srcX: (imgW - side) * (crop.x / 100), srcY: (imgH - side) * (crop.y / 100), side };
+    }
+
+    function computeContainRect(imgW, imgH, size, offset) {
+      const o = offset || { x: 50, y: 50, zoom: 100 };
+      if (imgW <= 0 || imgH <= 0) return { dx: 0, dy: 0, dw: size, dh: size };
+      const baseScale = Math.min(size / imgW, size / imgH);
+      const scale = baseScale * (o.zoom / 100);
+      const dw = imgW * scale;
+      const dh = imgH * scale;
+      const dx = (size - dw) * (o.x / 100);
+      const dy = (size - dh) * (o.y / 100);
+      return { dx, dy, dw, dh };
+    }
+
+    function buildIco(entries) {
+      const sorted = [...entries].sort((a, b) => a.size - b.size);
+      const n = sorted.length;
+      let offset = 6 + 16 * n;
+      const buf = new Uint8Array(offset + sorted.reduce((s, e) => s + e.data.length, 0));
+      const dv = new DataView(buf.buffer);
+      dv.setUint16(0, 0, true);
+      dv.setUint16(2, 1, true);
+      dv.setUint16(4, n, true);
+      sorted.forEach((e, i) => {
+        const p = 6 + 16 * i;
+        const dim = e.size >= 256 ? 0 : e.size;
+        buf[p] = dim; buf[p + 1] = dim; buf[p + 2] = 0; buf[p + 3] = 0;
+        dv.setUint16(p + 4, 1, true);
+        dv.setUint16(p + 6, 32, true);
+        dv.setUint32(p + 8, e.data.length, true);
+        dv.setUint32(p + 12, offset, true);
+        buf.set(e.data, offset);
+        offset += e.data.length;
+      });
+      return buf;
+    }
+
+    function buildZip(files) {
+      const enc = new TextEncoder();
+      const parts = [], central = [];
+      let offset = 0;
+      files.forEach(f => {
+        const name = enc.encode(f.name);
+        const crc = crc32(f.data);
+        const len = f.data.length;
+        const lh = new Uint8Array(30 + name.length);
+        const d = new DataView(lh.buffer);
+        d.setUint32(0, 0x04034b50, true); d.setUint16(4, 20, true); d.setUint16(6, 0x0800, true);
+        d.setUint16(8, 0, true); d.setUint16(10, 0, true); d.setUint16(12, 0x21, true);
+        d.setUint32(14, crc, true); d.setUint32(18, len, true); d.setUint32(22, len, true);
+        d.setUint16(26, name.length, true); d.setUint16(28, 0, true);
+        lh.set(name, 30);
+        parts.push(lh, f.data);
+        const ch = new Uint8Array(46 + name.length);
+        const c = new DataView(ch.buffer);
+        c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true);
+        c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true); c.setUint16(12, 0, true); c.setUint16(14, 0x21, true);
+        c.setUint32(16, crc, true); c.setUint32(20, len, true); c.setUint32(24, len, true);
+        c.setUint16(28, name.length, true); c.setUint32(42, offset, true);
+        ch.set(name, 46);
+        central.push(ch);
+        offset += lh.length + len;
+      });
+      const cdSize = central.reduce((s, c) => s + c.length, 0);
+      const end = new Uint8Array(22);
+      const e = new DataView(end.buffer);
+      e.setUint32(0, 0x06054b50, true);
+      e.setUint16(8, files.length, true); e.setUint16(10, files.length, true);
+      e.setUint32(12, cdSize, true); e.setUint32(16, offset, true);
+      return concatBytes([...parts, ...central, end]);
+    }
+
+    function sharpenData(data, w, h, level) {
+      if (level <= 0) return;
+      const amount = Math.min(1, level * 0.5);
+      const center = 1 + 4 * amount;
+      const src = new Uint8ClampedArray(data);
+      const at = (x, y, c) => src[(Math.min(h - 1, Math.max(0, y)) * w + Math.min(w - 1, Math.max(0, x))) * 4 + c];
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const off = (y * w + x) * 4;
+          for (let c = 0; c < 3; c++) {
+            data[off + c] = center * src[off + c] - amount * (at(x, y - 1, c) + at(x, y + 1, c) + at(x - 1, y, c) + at(x + 1, y, c));
+          }
+        }
+      }
+    }
+
+    function buildBmpDib(size, rgba) {
+      const maskRow = ((size + 31) >> 5) * 4;
+      const xorSize = size * size * 4;
+      const maskSize = maskRow * size;
+      const out = new Uint8Array(40 + xorSize + maskSize);
+      const dv = new DataView(out.buffer);
+      dv.setUint32(0, 40, true);
+      dv.setInt32(4, size, true);
+      dv.setInt32(8, size * 2, true);
+      dv.setUint16(12, 1, true);
+      dv.setUint16(14, 32, true);
+      dv.setUint32(16, 0, true);
+      dv.setUint32(20, xorSize + maskSize, true);
+      for (let y = 0; y < size; y++) {
+        let s = (size - 1 - y) * size * 4;
+        let d = 40 + y * size * 4;
+        let m = 40 + xorSize + y * maskRow;
+        for (let x = 0; x < size; x++, s += 4, d += 4) {
+          out[d] = rgba[s + 2]; out[d + 1] = rgba[s + 1]; out[d + 2] = rgba[s]; out[d + 3] = rgba[s + 3];
+          if (rgba[s + 3] < 128) out[m + (x >> 3)] |= (0x80 >> (x & 7));
+        }
+      }
+      return out;
+    }
+
+    function sanitizeFileName(raw) {
+      const cleaned = String(raw == null ? '' : raw)
+        .replace(/[\u0000-\u001f\\/:*?"<>|]/g, '').trim()
+        .replace(/\.(ico|png|zip)$/i, '')
+        .replace(/[. ]+$/, '').slice(0, 60);
+      if (!cleaned || /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i.test(cleaned)) return DEFAULT_FILENAME;
+      return cleaned;
+    }
+
+    function parseIco(bytes) {
+      if (bytes.length < 6) throw new Error('ICO demasiado corto');
+      const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      if (dv.getUint16(0, true) !== 0 || dv.getUint16(2, true) !== 1) throw new Error('Cabecera ICO inválida');
+      const n = dv.getUint16(4, true);
+      if (bytes.length < 6 + 16 * n) throw new Error('Directorio ICO truncado');
+      const entries = [];
+      for (let i = 0; i < n; i++) {
+        const p = 6 + 16 * i;
+        const len = dv.getUint32(p + 8, true);
+        const off = dv.getUint32(p + 12, true);
+        if (off + len > bytes.length) throw new Error('Entrada ICO fuera de rango');
+        const isPng = bytes[off] === 0x89 && bytes[off + 1] === 0x50;
+        if (!isPng && dv.getUint32(off, true) !== 40) throw new Error('Entrada ICO con formato desconocido');
+        entries.push({ size: bytes[p] || 256, bytes: len, type: isPng ? 'png' : 'bmp' });
+      }
+      return entries;
+    }
+
+    function adjustBrightnessContrast(data, brightness, contrast) {
+      if (brightness === 100 && contrast === 100) return;
+      const fb = brightness / 100, fc = contrast / 100;
+      for (let i = 0; i < data.length; i += 4) {
+        for (let c = 0; c < 3; c++) {
+          data[i + c] = (((data[i + c] * fb) / 255 - 0.5) * fc + 0.5) * 255;
+        }
+      }
+    }
+
+    function buildFaviconSnippet(name, format, sizes) {
+      const safe = sanitizeFileName(name);
+      if (format === 'ico') return `<link rel="icon" type="image/x-icon" href="/${safe}.ico">`;
+      const unique = [...new Set(sizes)].sort((a, b) => a - b);
+      if (unique.length === 0) return '';
+      if (unique.length === 1) {
+        const s = unique[0];
+        return `<link rel="icon" type="image/png" sizes="${s}x${s}" href="/${safe}_${s}x${s}.png">`;
+      }
+      return unique.map(s => {
+        const isApple = s >= 180 && s <= 200;
+        const tag = isApple ? 'apple-touch-icon' : 'icon';
+        return `<link rel="${tag}" type="image/png" sizes="${s}x${s}" href="/${safe}_${s}x${s}.png">`;
+      }).join('\n');
+    }
+    /* PURE_END */
+
+    const MAX_FILE_BYTES = 20 * 1024 * 1024;
+    const MAX_BASE_PX = 2048;
+    const MIN_BASE_PX = 512;
+    const HISTORY_LIMIT = 50;
+    const DEFAULT_FILENAME = 'icon';
+    const THEME_KEY = 'theme';
+    const TELEMETRY_KEY = 'telemetry_optin';
+    const ORIGINAL_PREVIEW_COLLAPSED_KEY = 'original_preview_collapsed';
+    // Tope del preview original: pequeño y predecible
+    const PREVIEW_MAX_W = 320;
+    const PREVIEW_MAX_H = 160;
+
+    class StorageManager {
+      constructor(namespace = 'NEXUS_ICON_RESIZER_PRO_') { this.namespace = namespace; }
+      saveState(key, data) {
+        try {
+          localStorage.setItem(this.namespace + key, JSON.stringify({ timestamp: new Date().toISOString(), payload: data }));
+          return true;
+        } catch (e) { console.error('Error al guardar en persistencia local:', e); return false; }
+      }
+      loadState(key) {
+        try {
+          const item = localStorage.getItem(this.namespace + key);
+          return item ? JSON.parse(item).payload : null;
+        } catch (e) { console.error('Error al leer persistencia local:', e); return null; }
+      }
+      clear() {
+        try {
+          Object.keys(localStorage).filter(k => k.startsWith(this.namespace)).forEach(k => localStorage.removeItem(k));
+          return true;
+        } catch (e) { console.error('Error al borrar persistencia local:', e); return false; }
+      }
+    }
+    const storage = new StorageManager();
+
+    const SIZE_CATALOG = [
+      { px: 16, matrix: true }, { px: 20, matrix: true }, { px: 24, matrix: true }, { px: 30 },
+      { px: 32, matrix: true }, { px: 36 }, { px: 40, matrix: true }, { px: 48, matrix: true },
+      { px: 60 }, { px: 64, matrix: true }, { px: 72 }, { px: 80 }, { px: 96 },
+      { px: 128, matrix: true }, { px: 256, matrix: true }
+    ];
+    const ICO_SIZES = SIZE_CATALOG.map(s => s.px);
+    const STANDARD_SIZES = SIZE_CATALOG.filter(s => s.matrix).map(s => s.px);
+    const DEFAULT_SIZES = [16, 32, 48, 64, 256];
+    const DEFAULT_CROP = { x: 50, y: 50, zoom: 100 };
+    const DEFAULT_FILTERS = { brightness: 100, contrast: 100, sharpen: 0 };
+    const DEFAULT_FIT = 'cover';
+
+    let appState = {
+      selectedSizes: [...DEFAULT_SIZES],
+      sourceImage: null,
+      sourceDataUrl: null,
+      crop: { ...DEFAULT_CROP },
+      filters: { ...DEFAULT_FILTERS },
+      fit: DEFAULT_FIT
+    };
+
+    const $ = id => document.getElementById(id);
+    const dropzone = $('dropzone');
+    const fileInput = $('file-input');
+    const workspace = $('workspace');
+    const sizeGrid = $('size-grid');
+    const previewTab = $('preview-tab');
+    const previewTaskbar = $('preview-taskbar');
+    const previewMain = $('preview-main');
+    const previewOriginal = $('preview-original');
+    const originalPreviewWrapper = $('original-preview-wrapper');
+    const originalPreviewBody = $('original-preview-body');
+    const btnToggleOriginal = $('btn-toggle-original-preview');
+    const iconToggleOriginal = $('icon-toggle-original');
+    const btnToggleOriginalLabel = $('btn-toggle-original-label');
+    const cropOverlay = $('crop-overlay');
+    const btnUndo = $('btn-undo');
+    const btnRedo = $('btn-redo');
+    const btnSelectAll = $('btn-select-all');
+    const btnResetMatrix = $('btn-reset-matrix');
+    const btnCenterCrop = $('btn-center-crop');
+    const btnExport = $('btn-export');
+    const btnExportLabel = $('btn-export-label');
+    const iconExportNormal = $('icon-export-normal');
+    const exportSpinner = $('export-spinner');
+    const btnCopyHtml = $('btn-copy-html');
+    const btnClearData = $('btn-clear-data');
+    const btnTheme = $('btn-theme');
+    const btnShortcuts = $('btn-shortcuts');
+    const iconThemeDark = $('icon-theme-dark');
+    const iconThemeLight = $('icon-theme-light');
+    const exportFormat = $('export-format');
+    const storageStatus = $('storage-status');
+    const appMessage = $('app-message');
+    const envTbSize = $('env-taskbar-size');
+    const envTheme = $('env-theme');
+    const envTaskbar = $('env-taskbar');
+    const envTbNote = $('env-taskbar-note');
+    const envExplorer = $('env-explorer');
+    const exportName = $('export-name');
+    const exportNameHint = $('export-name-hint');
+    const sizeNote = $('size-note');
+    const toastContainer = $('toast-container');
+    const shortcutsDialog = $('shortcuts-dialog');
+    const btnCloseShortcuts = $('btn-close-shortcuts');
+    const originalPreviewHint = $('original-preview-hint');
+    const originalPreviewNote = $('original-preview-note');
+    const fitModeHint = $('fit-mode-hint');
+    const fitButtons = Array.from(document.querySelectorAll('.fit-btn'));
+    const btnHeaderToggle = $('btn-header-toggle');
+    const headerActionsPanel = $('header-actions-panel');
+    const iconHeaderMenu = $('icon-header-menu');
+    const btnTelemetry = $('btn-telemetry');
+    const telemetryLabel = $('telemetry-label');
+
+    /* Helpers de canvas */
+    function enableSmoothing(ctx) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      return ctx;
+    }
+    function buildBaseFromImage(img, sx, sy, sw, sh, dw, dh) {
+      const canvas = document.createElement('canvas');
+      canvas.width = dw;
+      canvas.height = dh;
+      enableSmoothing(canvas.getContext('2d')).drawImage(img, sx, sy, sw, sh, 0, 0, dw, dh);
+      return canvas;
+    }
+
+    /* Toasts y mensajes */
+    function showToast(message, type = 'info', duration = 4000) {
+      const el = document.createElement('div');
+      const palette = {
+        info: 'border-nexus-cyan text-nexus-text',
+        success: 'border-nexus-matrix text-nexus-text',
+        error: 'border-nexus-orange text-nexus-text'
+      }[type] || 'border-nexus-border text-nexus-text';
+      const iconName = { info: 'info', success: 'check-circle-2', error: 'alert-triangle' }[type] || 'info';
+      el.className = `toast pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl bg-nexus-surface border-l-4 ${palette} shadow-2xl min-w-[260px] max-w-[420px]`;
+      el.setAttribute('role', type === 'error' ? 'alert' : 'status');
+      el.innerHTML = `
+        <i data-lucide="${iconName}" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
+        <div class="flex-1 text-sm leading-snug"></div>
+        <button type="button" class="text-nexus-muted hover:text-nexus-text p-1 -m-1 rounded" aria-label="Cerrar notificación">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>`;
+      el.querySelector('.flex-1').textContent = message;
+      toastContainer.appendChild(el);
+      try { lucide.createIcons({ nameAttr: 'data-lucide' }); } catch (e) { /* decorativo */ }
+      const remove = () => { el.classList.add('removing'); setTimeout(() => el.remove(), 200); };
+      el.querySelector('button').addEventListener('click', remove);
+      setTimeout(remove, duration);
+      return el;
+    }
+
+    function showMessage(text, type = 'error') {
+      appMessage.textContent = text;
+      appMessage.classList.toggle('hidden', !text);
+      appMessage.setAttribute('role', type === 'error' ? 'alert' : 'status');
+      appMessage.classList.toggle('text-nexus-orange', type === 'error');
+      appMessage.classList.toggle('text-nexus-cyan', type !== 'error');
+    }
+
+    function setStorageStatus(ok, text) {
+      storageStatus.textContent = text;
+      storageStatus.classList.toggle('text-nexus-cyan', ok);
+      storageStatus.classList.toggle('text-nexus-orange', !ok);
+    }
+
+    /* Telemetría opt-in */
+    let telemetryEnabled = false;
+    function loadTelemetryPreference() {
+      telemetryEnabled = storage.loadState(TELEMETRY_KEY) === true;
+      renderTelemetryUI();
+    }
+    function renderTelemetryUI() {
+      btnTelemetry.setAttribute('aria-pressed', telemetryEnabled ? 'true' : 'false');
+      telemetryLabel.textContent = `Telemetría local: ${telemetryEnabled ? 'Activa' : 'Apagada'}`;
+      btnTelemetry.classList.toggle('text-nexus-cyan', telemetryEnabled);
+      btnTelemetry.classList.toggle('border-nexus-cyan', telemetryEnabled);
+    }
+    function toggleTelemetry() {
+      telemetryEnabled = !telemetryEnabled;
+      storage.saveState(TELEMETRY_KEY, telemetryEnabled);
+      renderTelemetryUI();
+      showToast(
+        telemetryEnabled
+          ? 'Telemetría local activada. Sólo se cuentan acciones anónimas en este navegador.'
+          : 'Telemetría local desactivada. No se registrará ningún dato.',
+        'info', 4000
+      );
+    }
+    btnTelemetry.addEventListener('click', toggleTelemetry);
+
+    function track(event) {
+      if (!telemetryEnabled) return;
+      try {
+        const stats = storage.loadState('stats') || { events: {}, firstUse: new Date().toISOString() };
+        stats.events[event] = (stats.events[event] || 0) + 1;
+        stats.lastUse = new Date().toISOString();
+        storage.saveState('stats', stats);
+      } catch (e) { /* silencioso */ }
+    }
+
+    function getTopActions(n = 3) {
+      if (!telemetryEnabled) return [];
+      const stats = storage.loadState('stats');
+      if (!stats || !stats.events) return [];
+      return Object.entries(stats.events)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, n)
+        .map(([k]) => k);
+    }
+    try { window.NexusUx = { track, getTopActions, isTelemetryEnabled: () => telemetryEnabled }; } catch (e) { /* noop */ }
+
+    /* Menú hamburguesa */
+    function setHeaderMenuOpen(open) {
+      btnHeaderToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btnHeaderToggle.setAttribute('aria-label', open ? 'Cerrar menú de acciones' : 'Abrir menú de acciones');
+      headerActionsPanel.hidden = !open;
+      headerActionsPanel.classList.toggle('hidden', !open);
+      headerActionsPanel.classList.toggle('flex', open);
+      if (iconHeaderMenu) {
+        iconHeaderMenu.setAttribute('data-lucide', open ? 'x' : 'menu');
+        try { lucide.createIcons({ nameAttr: 'data-lucide' }); } catch (e) { /* decorativo */ }
+      }
+    }
+    function toggleHeaderMenu() {
+      setHeaderMenuOpen(btnHeaderToggle.getAttribute('aria-expanded') !== 'true');
+    }
+    btnHeaderToggle.addEventListener('click', toggleHeaderMenu);
+    const mqDesktop = window.matchMedia('(min-width: 768px)');
+    const handleDesktopChange = (e) => { if (e.matches) setHeaderMenuOpen(false); };
+    if (mqDesktop.addEventListener) mqDesktop.addEventListener('change', handleDesktopChange);
+    else if (mqDesktop.addListener) mqDesktop.addListener(handleDesktopChange);
+
+    /* Colapso del preview original */
+    function setOriginalPreviewCollapsed(collapsed, persist = true) {
+      originalPreviewBody.hidden = collapsed;
+      btnToggleOriginal.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      btnToggleOriginalLabel.textContent = collapsed ? 'Mostrar' : 'Ocultar';
+      if (iconToggleOriginal) {
+        iconToggleOriginal.setAttribute('data-lucide', collapsed ? 'chevron-down' : 'chevron-up');
+        try { lucide.createIcons({ nameAttr: 'data-lucide' }); } catch (e) { /* decorativo */ }
+      }
+      if (persist) storage.saveState(ORIGINAL_PREVIEW_COLLAPSED_KEY, collapsed);
+    }
+    btnToggleOriginal.addEventListener('click', () => {
+      setOriginalPreviewCollapsed(!originalPreviewBody.hidden);
+    });
+
+    /* Tamaño compacto del preview original */
+    function updateOriginalPreviewSize() {
+      const img = appState.sourceImage;
+      if (!img || !originalPreviewWrapper) return;
+      const imgW = img.naturalWidth || img.width;
+      const imgH = img.naturalHeight || img.height;
+      if (!imgW || !imgH) return;
+      const scale = Math.min(PREVIEW_MAX_W / imgW, PREVIEW_MAX_H / imgH);
+      const w = Math.max(1, Math.round(imgW * scale));
+      originalPreviewWrapper.style.setProperty('--preview-w', w + 'px');
+      originalPreviewWrapper.style.setProperty('--preview-ar', `${imgW} / ${imgH}`);
+    }
+
+    /* Sliders */
+    const SLIDERS = [
+      { id: 'crop-x', get: () => appState.crop.x, set: v => { appState.crop.x = v; }, fmt: v => v + '%' },
+      { id: 'crop-y', get: () => appState.crop.y, set: v => { appState.crop.y = v; }, fmt: v => v + '%' },
+      { id: 'crop-zoom', get: () => appState.crop.zoom, set: v => { appState.crop.zoom = v; }, fmt: v => v + '%' },
+      { id: 'brightness', get: () => appState.filters.brightness, set: v => { appState.filters.brightness = v; }, fmt: v => v + '%' },
+      { id: 'contrast', get: () => appState.filters.contrast, set: v => { appState.filters.contrast = v; }, fmt: v => v + '%' },
+      { id: 'sharpen', get: () => appState.filters.sharpen, set: v => { appState.filters.sharpen = v; }, fmt: v => v === 0 ? 'Desactivado' : 'Nivel ' + v }
+    ].map(s => ({ ...s, range: $('range-' + s.id), label: $('val-' + s.id) }));
+
+    function syncSliders() {
+      SLIDERS.forEach(s => {
+        s.range.value = s.get();
+        const text = s.fmt(s.get());
+        s.label.textContent = text;
+        s.range.setAttribute('aria-valuetext', text);
+      });
+    }
+
+    /* Tema */
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      html.classList.toggle('dark', theme === 'dark');
+      html.classList.toggle('light', theme === 'light');
+      const meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta) meta.setAttribute('content', theme === 'light' ? 'light dark' : 'dark light');
+      iconThemeDark.classList.toggle('hidden', theme !== 'dark');
+      iconThemeLight.classList.toggle('hidden', theme !== 'light');
+      btnTheme.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+    }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+      storage.saveState(THEME_KEY, next);
+      track('theme_toggle');
+    }
+    btnTheme.addEventListener('click', toggleTheme);
+
+    /* Historial */
+    const history = { stack: [], index: -1 };
+
+    function snapshotState() {
+      return JSON.stringify({
+        crop: appState.crop,
+        filters: appState.filters,
+        selectedSizes: [...appState.selectedSizes].sort((a, b) => a - b),
+        fit: appState.fit
+      });
+    }
+    function initHistory() {
+      history.stack = [snapshotState()];
+      history.index = 0;
+      updateHistoryButtons();
+    }
+    function commitState() {
+      const s = snapshotState();
+      if (history.index >= 0 && history.stack[history.index] === s) return;
+      history.stack = history.stack.slice(0, history.index + 1);
+      history.stack.push(s);
+      if (history.stack.length > HISTORY_LIMIT) history.stack.shift();
+      history.index = history.stack.length - 1;
+      updateHistoryButtons();
+    }
+    function applyHistoryState(json) {
+      const s = JSON.parse(json);
+      appState.crop = { ...s.crop };
+      appState.filters = { ...s.filters };
+      appState.selectedSizes = [...s.selectedSizes];
+      if (s.fit === 'cover' || s.fit === 'contain') appState.fit = s.fit;
+      syncSliders();
+      applyFitModeUI(appState.fit);
+      renderSizeGrid();
+      invalidateCache();
+      requestDraw();
+      persistSettings();
+      updateExportState();
+      updateHistoryButtons();
+    }
+    function undo() {
+      if (history.index <= 0) return;
+      history.index--;
+      applyHistoryState(history.stack[history.index]);
+      showToast('Cambio deshecho.', 'info', 1800);
+      track('undo');
+    }
+    function redo() {
+      if (history.index >= history.stack.length - 1) return;
+      history.index++;
+      applyHistoryState(history.stack[history.index]);
+      showToast('Cambio rehecho.', 'info', 1800);
+      track('redo');
+    }
+    function updateHistoryButtons() {
+      btnUndo.disabled = history.index <= 0;
+      btnRedo.disabled = history.index >= history.stack.length - 1;
+    }
+    btnUndo.addEventListener('click', undo);
+    btnRedo.addEventListener('click', redo);
+
+    /* Persistencia */
+    let persistTimer = null;
+    function persistSettings() {
+      clearTimeout(persistTimer);
+      persistTimer = setTimeout(() => {
+        const ok = storage.saveState('settings', {
+          selectedSizes: appState.selectedSizes, crop: appState.crop, filters: appState.filters, fit: appState.fit,
+          env: { taskbarSize: envTbSize.value, theme: envTheme.value },
+          exportName: exportName.value, exportFormat: exportFormat.value
+        });
+        if (!ok) setStorageStatus(false, 'PERSISTENCIA NO DISPONIBLE');
+      }, 250);
+    }
+    function persistSource() {
+      const ok = storage.saveState('source', appState.sourceDataUrl);
+      if (ok) setStorageStatus(true, 'LOCAL PERSISTENCE ACTIVE');
+      else setStorageStatus(false, 'IMAGEN GRANDE: NO GUARDADA');
+    }
+
+    /* Matriz de tamaños */
+    const CARD_BASE = 'p-4 rounded-xl border transition-all flex flex-col justify-between ';
+    const CARD_ON = 'bg-nexus-surfaceHover border-nexus-cyan/50 cyber-glow';
+    const CARD_OFF = 'bg-nexus-surface/40 border-nexus-border opacity-60';
+
+    function renderSizeGrid() {
+      sizeGrid.innerHTML = '';
+      STANDARD_SIZES.forEach(size => {
+        const isSelected = appState.selectedSizes.includes(size);
+        const card = document.createElement('div');
+        card.className = CARD_BASE + (isSelected ? CARD_ON : CARD_OFF);
+        card.dataset.sizeCard = size;
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <label for="chk-${size}" class="font-mono font-bold text-sm text-nexus-text cursor-pointer">${size} × ${size} px</label>
+            <input type="checkbox" id="chk-${size}" data-size="${size}" aria-label="Incluir tamaño ${size} por ${size} píxeles" class="size-checkbox accent-nexus-cyan w-5 h-5 cursor-pointer" ${isSelected ? 'checked' : ''}>
+          </div>
+          <div class="h-16 bg-nexus-bg rounded-lg border border-nexus-border/60 flex items-center justify-center p-1 relative overflow-hidden">
+            <canvas id="canvas-${size}" width="${size}" height="${size}" role="img" aria-label="Vista previa del icono a ${size} por ${size} píxeles" class="max-w-full max-h-full object-contain"></canvas>
+          </div>
+        `;
+        sizeGrid.appendChild(card);
+      });
+      if (appState.sourceImage) requestDraw();
+    }
+
+    sizeGrid.addEventListener('change', (e) => {
+      if (!e.target.classList.contains('size-checkbox')) return;
+      const size = parseInt(e.target.dataset.size, 10);
+      appState.selectedSizes = e.target.checked
+        ? [...new Set([...appState.selectedSizes, size])].sort((a, b) => a - b)
+        : appState.selectedSizes.filter(s => s !== size);
+      e.target.closest('[data-size-card]').className = CARD_BASE + (e.target.checked ? CARD_ON : CARD_OFF);
+      persistSettings();
+      commitState();
+      updateExportState();
+      if (appState.sourceImage) requestDraw();
+      track('size_toggle');
+    });
+
+    /* Modo cover/contain */
+    function setFitModeText(fit) {
+      if (fit === 'contain') {
+        originalPreviewHint.textContent = 'Modo Ajustar: se usa la imagen completa';
+        originalPreviewNote.innerHTML = 'En modo <strong>Ajustar</strong>, la imagen se escala completa con relleno transparente. Los sliders <strong>X / Y</strong> mueven la imagen y <strong>Zoom</strong> la reduce para añadir más relleno. Al 100% de zoom una dimensión queda fija; baja el zoom para poder mover en ambos ejes.';
+        fitModeHint.innerHTML = '<strong>Ajustar:</strong> imagen completa + relleno transparente. <strong>X/Y</strong> posicionan, <strong>Zoom</strong> escala.';
+      } else {
+        originalPreviewHint.textContent = 'El recuadro cian es lo que se exportará';
+        originalPreviewNote.innerHTML = 'Los iconos deben ser cuadrados (1:1). Si tu imagen es rectangular, se recorta a un cuadrado: la parte que quede fuera del recuadro cian no se incluye en el icono exportado. Mueve <strong>X</strong> / <strong>Y</strong> / <strong>Zoom</strong> para ajustar, o cambia a <strong>Ajustar</strong> para no perder nada.';
+        fitModeHint.innerHTML = '<strong>Recortar:</strong> escoge un cuadrado de la imagen. <strong>Ajustar:</strong> usa toda la imagen y añade relleno transparente.';
+      }
+    }
+
+    function applyFitModeUI(fit) {
+      fitButtons.forEach(btn => {
+        btn.setAttribute('aria-checked', btn.dataset.fit === fit ? 'true' : 'false');
+      });
+      setFitModeText(fit);
+    }
+
+    function setFitMode(fit, options = {}) {
+      const { persist = true, commit = true, notify = true } = options;
+      if (fit !== 'cover' && fit !== 'contain') return;
+      if (appState.fit === fit) return;
+      appState.fit = fit;
+      applyFitModeUI(fit);
+      invalidateCache();
+      requestDraw();
+      if (persist) persistSettings();
+      if (commit) commitState();
+      if (notify) {
+        showToast(fit === 'contain'
+          ? 'Modo Ajustar: la imagen completa se escala con relleno. Usa X/Y/Zoom para ajustar.'
+          : 'Modo Recortar: se usará un cuadrado de la imagen.', 'info', 2400);
+      }
+      track('fit_' + fit);
+    }
+
+    fitButtons.forEach(btn => {
+      btn.addEventListener('click', () => setFitMode(btn.dataset.fit));
+    });
+
+    /* Render pipeline */
+    let renderCache = null;
+    let currentPrep = null;
+    let iconUrlCache = {};
+
+    function invalidateCache() { renderCache = null; }
+
+    function prepareBase(maxBase = MAX_BASE_PX) {
+      const img = appState.sourceImage;
+      const c = appState.crop;
+      const fit = appState.fit;
+      const isSvg = (appState.sourceDataUrl || '').startsWith('data:image/svg');
+
+      if (renderCache && renderCache.img === img && renderCache.x === c.x && renderCache.y === c.y &&
+        renderCache.zoom === c.zoom && renderCache.maxBase === maxBase && renderCache.fit === fit) {
+        return renderCache.prep;
+      }
+
+      const imgW = img.naturalWidth || img.width;
+      const imgH = img.naturalHeight || img.height;
+      let prep;
+
+      if (isSvg) {
+        prep = { img, crop: fit === 'cover' ? computeCrop(imgW, imgH, c) : null, mode: fit, levels: [] };
+      } else if (fit === 'contain') {
+        const scale = Math.min(1, maxBase / Math.max(imgW, imgH));
+        const bw = Math.max(1, Math.round(imgW * scale));
+        const bh = Math.max(1, Math.round(imgH * scale));
+        prep = { img, crop: null, mode: 'contain', levels: [buildBaseFromImage(img, 0, 0, imgW, imgH, bw, bh)] };
+      } else {
+        const crop = computeCrop(imgW, imgH, c);
+        const bs = Math.max(1, Math.min(maxBase, Math.round(crop.side)));
+        prep = { img, crop, mode: 'cover', levels: [buildBaseFromImage(img, crop.srcX, crop.srcY, crop.side, crop.side, bs, bs)] };
+      }
+      renderCache = { img, x: c.x, y: c.y, zoom: c.zoom, maxBase, fit, prep };
+      return prep;
+    }
+
+    function pyramidLevel(prep, size) {
+      const lv = prep.levels;
+      if (!lv.length) return null;
+      let i = lv.findIndex(l => l.width <= size * 2);
+      while (i === -1) {
+        const prev = lv[lv.length - 1];
+        const next = Math.ceil(prev.width / 2);
+        const tmp = document.createElement('canvas');
+        tmp.width = next; tmp.height = next;
+        enableSmoothing(tmp.getContext('2d')).drawImage(prev, 0, 0, next, next);
+        lv.push(tmp);
+        if (next <= size * 2) i = lv.length - 1;
+      }
+      return lv[i];
+    }
+
+    function drawContainProgressive(ctx, sourceCanvas, size, offset) {
+      let cur = sourceCanvas;
+      let cw = cur.width, ch = cur.height;
+      while (cw > size * 2 || ch > size * 2) {
+        const nw = Math.max(1, Math.ceil(cw / 2));
+        const nh = Math.max(1, Math.ceil(ch / 2));
+        const tmp = document.createElement('canvas');
+        tmp.width = nw; tmp.height = nh;
+        enableSmoothing(tmp.getContext('2d')).drawImage(cur, 0, 0, cw, ch, 0, 0, nw, nh);
+        cur = tmp;
+        cw = nw; ch = nh;
+      }
+      const r = computeContainRect(cw, ch, size, offset);
+      ctx.drawImage(cur, 0, 0, cw, ch, r.dx, r.dy, r.dw, r.dh);
+    }
+
+    function drawContainFromImage(ctx, img, size, offset) {
+      const iw = img.naturalWidth || img.width;
+      const ih = img.naturalHeight || img.height;
+      const r = computeContainRect(iw, ih, size, offset);
+      ctx.drawImage(img, 0, 0, iw, ih, r.dx, r.dy, r.dw, r.dh);
+    }
+
+    function renderIconTo(canvas, size, prep) {
+      if (canvas.width !== size) canvas.width = size;
+      if (canvas.height !== size) canvas.height = size;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      const f = appState.filters;
+      const nativeFilter = 'filter' in ctx;
+      const needsAdjust = f.brightness !== 100 || f.contrast !== 100;
+      ctx.clearRect(0, 0, size, size);
+      enableSmoothing(ctx);
+      if (nativeFilter && needsAdjust) ctx.filter = `brightness(${f.brightness}%) contrast(${f.contrast}%)`;
+
+      if (prep.mode === 'contain') {
+        if (prep.levels.length) drawContainProgressive(ctx, prep.levels[0], size, appState.crop);
+        else drawContainFromImage(ctx, prep.img, size, appState.crop);
+      } else {
+        const src = pyramidLevel(prep, size);
+        if (src) ctx.drawImage(src, 0, 0, src.width, src.height, 0, 0, size, size);
+        else ctx.drawImage(prep.img, prep.crop.srcX, prep.crop.srcY, prep.crop.side, prep.crop.side, 0, 0, size, size);
+      }
+      if (nativeFilter) ctx.filter = 'none';
+
+      const pixelAdjust = !nativeFilter && needsAdjust;
+      if (pixelAdjust || f.sharpen > 0) {
+        const imgData = ctx.getImageData(0, 0, size, size);
+        if (pixelAdjust) adjustBrightnessContrast(imgData.data, f.brightness, f.contrast);
+        if (f.sharpen > 0) sharpenData(imgData.data, size, size, f.sharpen);
+        ctx.putImageData(imgData, 0, 0);
+      }
+      return ctx;
+    }
+
+    function getIconUrl(size) {
+      if (iconUrlCache[size]) return iconUrlCache[size];
+      let canvas = document.getElementById(`canvas-${size}`);
+      if (!canvas) { canvas = document.createElement('canvas'); renderIconTo(canvas, size, currentPrep); }
+      iconUrlCache[size] = canvas.toDataURL('image/png');
+      return iconUrlCache[size];
+    }
+
+    function updateCropOverlay() {
+      const img = appState.sourceImage;
+      if (!img) { cropOverlay.style.display = 'none'; return; }
+      cropOverlay.style.display = '';
+      if (appState.fit === 'contain') {
+        cropOverlay.style.left = '0';
+        cropOverlay.style.top = '0';
+        cropOverlay.style.width = '100%';
+        cropOverlay.style.height = '100%';
+        cropOverlay.style.borderStyle = 'dashed';
+        return;
+      }
+      cropOverlay.style.borderStyle = 'solid';
+      const imgW = img.naturalWidth || img.width;
+      const imgH = img.naturalHeight || img.height;
+      const crop = computeCrop(imgW, imgH, appState.crop);
+      cropOverlay.style.left = ((crop.srcX / imgW) * 100).toFixed(3) + '%';
+      cropOverlay.style.top = ((crop.srcY / imgH) * 100).toFixed(3) + '%';
+      cropOverlay.style.width = ((crop.side / imgW) * 100).toFixed(3) + '%';
+      cropOverlay.style.height = ((crop.side / imgH) * 100).toFixed(3) + '%';
+    }
+
+    let envTimer = null;
+    function scheduleEnvRefresh() {
+      clearTimeout(envTimer);
+      envTimer = setTimeout(refreshEnvironments, 120);
+    }
+
+    function drawAllCanvases() {
+      if (!appState.sourceImage) return;
+      currentPrep = prepareBase();
+      iconUrlCache = {};
+      STANDARD_SIZES.forEach(size => {
+        const canvas = document.getElementById(`canvas-${size}`);
+        if (canvas) renderIconTo(canvas, size, currentPrep);
+      });
+      const dataUrl = getIconUrl(256);
+      previewTab.src = dataUrl;
+      previewTaskbar.src = dataUrl;
+      previewMain.src = dataUrl;
+      updateCropOverlay();
+      scheduleEnvRefresh();
+    }
+
+    let drawQueued = false;
+    function requestDraw() {
+      if (drawQueued) return;
+      drawQueued = true;
+      requestAnimationFrame(() => { drawQueued = false; drawAllCanvases(); });
+    }
+
+    function handleImageLoad(dataUrl, persist = true) {
+      const img = new Image();
+      img.onload = () => {
+        appState.sourceImage = img;
+        appState.sourceDataUrl = dataUrl;
+        showMessage('');
+        workspace.classList.remove('hidden');
+        dropzone.classList.add('py-6');
+        previewOriginal.src = dataUrl;
+        updateOriginalPreviewSize();
+        renderSizeGrid();
+        initHistory();
+        updateExportState();
+        updateCropOverlay();
+        if (persist) persistSource();
+        showToast('Imagen cargada correctamente.', 'success', 3000);
+        track('image_loaded');
+      };
+      img.onerror = () => {
+        showMessage('No se pudo leer la imagen. Verifica que el archivo no esté dañado.');
+        showToast('No se pudo leer la imagen.', 'error');
+      };
+      img.src = dataUrl;
+    }
+
+    function loadFile(file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        showMessage('Formato no soportado. Usa PNG, JPG, SVG, WebP o ICO.');
+        showToast('Formato no soportado. Prueba con PNG, JPG, SVG, WebP o ICO.', 'error');
+        return;
+      }
+      if (file.size > MAX_FILE_BYTES) {
+        showMessage('El archivo supera el límite de 20 MB.');
+        showToast('El archivo supera el límite de 20 MB.', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => handleImageLoad(event.target.result);
+      reader.onerror = () => {
+        showMessage('No se pudo leer el archivo.');
+        showToast('No se pudo leer el archivo.', 'error');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    SLIDERS.forEach(s => {
+      s.range.addEventListener('input', (e) => {
+        if (s.range.disabled) return;
+        s.set(parseInt(e.target.value, 10));
+        const text = s.fmt(s.get());
+        s.label.textContent = text;
+        s.range.setAttribute('aria-valuetext', text);
+        requestDraw();
+        persistSettings();
+      });
+      s.range.addEventListener('change', () => { if (!s.range.disabled) commitState(); });
+    });
+
+    [dropzone, fileInput].forEach(el => {
+      el.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); dropzone.classList.add('border-nexus-cyan'); });
+      el.addEventListener('dragleave', () => { dropzone.classList.remove('border-nexus-cyan'); });
+      el.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('border-nexus-cyan');
+        loadFile(e.dataTransfer.files && e.dataTransfer.files[0]);
+      });
+    });
+    fileInput.addEventListener('change', (e) => loadFile(e.target.files[0]));
+
+    btnSelectAll.addEventListener('click', () => {
+      appState.selectedSizes = [...STANDARD_SIZES];
+      renderSizeGrid();
+      persistSettings();
+      commitState();
+      updateExportState();
+      showToast('Todos los tamaños seleccionados.', 'info', 2000);
+      track('select_all_sizes');
+    });
+
+    btnResetMatrix.addEventListener('click', () => {
+      appState.selectedSizes = [...DEFAULT_SIZES];
+      appState.crop = { ...DEFAULT_CROP };
+      appState.filters = { ...DEFAULT_FILTERS };
+      appState.fit = DEFAULT_FIT;
+      syncSliders();
+      applyFitModeUI(appState.fit);
+      renderSizeGrid();
+      invalidateCache();
+      requestDraw();
+      persistSettings();
+      commitState();
+      updateExportState();
+      showToast('Ajustes restablecidos.', 'info', 2000);
+      track('reset');
+    });
+
+    btnCenterCrop.addEventListener('click', () => {
+      appState.crop.x = 50;
+      appState.crop.y = 50;
+      syncSliders();
+      requestDraw();
+      persistSettings();
+      commitState();
+      showToast('Posición centrada.', 'info', 1800);
+    });
+
+    btnClearData.addEventListener('click', () => {
+      const ok = storage.clear();
+      setStorageStatus(ok, ok ? 'DATOS LOCALES BORRADOS' : 'NO SE PUDO BORRAR');
+      showToast(ok ? 'Datos locales borrados.' : 'No se pudieron borrar los datos.', ok ? 'success' : 'error');
+    });
+
+    async function copyFaviconHtml() {
+      if (!appState.sourceImage) {
+        showMessage('Carga una imagen primero para generar el fragmento HTML.');
+        showToast('Carga una imagen primero.', 'error');
+        return;
+      }
+      const format = exportFormat.value;
+      const sizes = format === 'ico' ? ICO_SIZES : appState.selectedSizes;
+      if (format === 'png' && sizes.length === 0) {
+        showMessage('Selecciona al menos un tamaño para el fragmento PNG.');
+        showToast('Selecciona al menos un tamaño.', 'error');
+        return;
+      }
+      const html = buildFaviconSnippet(exportName.value, format, sizes);
+      if (!html) { showToast('No se pudo generar el fragmento HTML.', 'error'); return; }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(html);
+          showToast('Fragmento HTML del favicon copiado al portapapeles.', 'success');
+          track('copy_favicon_html');
+        } else { throw new Error('clipboard no disponible'); }
+      } catch (err) {
+        window.prompt('Copia el fragmento HTML del favicon:', html);
+      }
+    }
+    btnCopyHtml.addEventListener('click', copyFaviconHtml);
+
+    function updateExportState() {
+      if (btnExport.getAttribute('aria-busy') === 'true') return;
+      const hasImage = !!appState.sourceImage;
+      const hasSizes = appState.selectedSizes.length > 0;
+      const format = exportFormat.value;
+      const ok = hasImage && (format === 'ico' || hasSizes);
+      btnExport.disabled = !ok;
+      btnExport.title = ok ? 'Generar y descargar el archivo' :
+        !hasImage ? 'Carga una imagen primero' :
+          'Selecciona al menos un tamaño';
+    }
+    function setExportLoading(loading) {
+      btnExport.setAttribute('aria-busy', loading ? 'true' : 'false');
+      btnExport.disabled = loading;
+      iconExportNormal.classList.toggle('hidden', loading);
+      exportSpinner.classList.toggle('hidden', !loading);
+      btnExportLabel.textContent = loading ? 'Generando…' : 'Generar y Descargar';
+    }
+
+    function updateExportNameHint() {
+      const raw = exportName.value;
+      const clean = sanitizeFileName(raw);
+      if (!raw) { exportNameHint.textContent = ''; return; }
+      if (raw !== clean) {
+        exportNameHint.textContent = `Se guardará como "${clean}"`;
+        exportNameHint.classList.add('text-nexus-orange');
+        exportNameHint.classList.remove('text-nexus-muted');
+      } else {
+        exportNameHint.textContent = '';
+        exportNameHint.classList.remove('text-nexus-orange');
+        exportNameHint.classList.add('text-nexus-muted');
+      }
+    }
+
+    function canvasToPngBytes(canvas) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(async (blob) => {
+          if (!blob) return reject(new Error('toBlob devolvió null'));
+          resolve(new Uint8Array(await blob.arrayBuffer()));
+        }, 'image/png');
+      });
+    }
+    function downloadBytes(bytes, name, mime) {
+      const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      const link = document.createElement('a');
+      link.download = name;
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    async function exportIcon(isIco, maxBase) {
+      const prep = prepareBase(maxBase);
+      const name = sanitizeFileName(exportName.value);
+      exportName.value = name;
+      updateExportNameHint();
+      const kb = bytes => (bytes.length / 1024).toFixed(0) + ' KB';
+      if (isIco) {
+        const entries = [];
+        for (const size of ICO_SIZES) {
+          const canvas = document.createElement('canvas');
+          const ctx = renderIconTo(canvas, size, prep);
+          const data = size >= 256
+            ? await canvasToPngBytes(canvas)
+            : buildBmpDib(size, ctx.getImageData(0, 0, size, size).data);
+          entries.push({ size, data });
+        }
+        const ico = buildIco(entries);
+        const parsed = parseIco(ico);
+        if (parsed.length !== ICO_SIZES.length || parsed.some((e, i) => e.size !== ICO_SIZES[i])) {
+          throw new Error('El .ico generado no coincide con los tamaños esperados');
+        }
+        downloadBytes(ico, `${name}.ico`, 'image/x-icon');
+        showToast(`${name}.ico generado: ${parsed.length} tamaños, ${kb(ico)}.`, 'success', 5000);
+      } else {
+        const entries = [];
+        for (const size of [...appState.selectedSizes].sort((a, b) => a - b)) {
+          const canvas = document.createElement('canvas');
+          renderIconTo(canvas, size, prep);
+          entries.push({ size, data: await canvasToPngBytes(canvas) });
+        }
+        if (entries.length === 1) {
+          downloadBytes(entries[0].data, `${name}.png`, 'image/png');
+          showToast(`${name}.png generado.`, 'success');
+        } else {
+          const files = entries.map(e => ({ name: `${name}_${e.size}x${e.size}.png`, data: e.data }));
+          downloadBytes(buildZip(files), `${name}.zip`, 'application/zip');
+          showToast(`${name}.zip generado con ${entries.length} PNGs.`, 'success');
+        }
+      }
+    }
+
+    btnExport.addEventListener('click', async () => {
+      if (!appState.sourceImage) { showMessage('Por favor, carga una imagen primero.'); showToast('Carga una imagen primero.', 'error'); return; }
+      const isIco = exportFormat.value === 'ico';
+      if (!isIco && appState.selectedSizes.length === 0) { showMessage('Selecciona al menos un tamaño para exportar.'); showToast('Selecciona al menos un tamaño.', 'error'); return; }
+      showMessage('');
+      setExportLoading(true);
+      try {
+        for (let maxBase = MAX_BASE_PX; maxBase >= MIN_BASE_PX; maxBase /= 2) {
+          try { await exportIcon(isIco, maxBase); track('export_' + (isIco ? 'ico' : 'zip')); return; }
+          catch (err) { console.error(`Error al exportar (base ${maxBase}px):`, err); invalidateCache(); }
+        }
+        showMessage('No se pudo generar la exportación. Prueba con una imagen más pequeña.');
+        showToast('No se pudo generar la exportación.', 'error', 6000);
+      } finally {
+        setExportLoading(false);
+        updateExportState();
+      }
+    });
+
+    /* Simulador de entornos */
+    const ENV_ICONS = {
+      folder: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#F2B84B"/></svg>`,
+      globe: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3B82F6"/><path d="M2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20" stroke="#fff" stroke-width="1.5" fill="none"/></svg>`,
+      terminal: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" fill="#1F2937"/><path d="M6 9l3 3-3 3M11 15h6" stroke="#4ADE80" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+      gear: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#9CA3AF"/><circle cx="12" cy="12" r="3.5" fill="#374151"/></svg>`,
+      doc: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><path d="M5 2h9l5 5v15H5z" fill="#E5E7EB"/><path d="M14 2v5h5" fill="#9CA3AF"/><path d="M8 12h8M8 16h8" stroke="#6B7280" stroke-width="1.5"/></svg>`,
+      app: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2" fill="#F3F4F6"/><rect x="2" y="4" width="20" height="5" rx="2" fill="#6366F1"/></svg>`,
+      start: px => `<svg viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="#38BDF8"/></svg>`
+    };
+    const EXPLORER_VIEWS = [
+      { label: 'Lista / Detalles', px: 16, css: 16 },
+      { label: 'Iconos pequeños', px: 32, css: 32 },
+      { label: 'Iconos medianos', px: 48, css: 48 },
+      { label: 'Iconos grandes', px: 96, css: 96 },
+      { label: 'Extra grandes (mostrado al 50 %)', px: 256, css: 128 }
+    ];
+
+    function envIcon(px, cssPx, alt = `Icono de la app a ${px} píxeles`) {
+      const sizes = exportFormat.value === 'ico' ? ICO_SIZES : [...appState.selectedSizes].sort((a, b) => a - b);
+      const pool = sizes.length ? sizes : [256];
+      const entry = pool.find(sz => sz >= px) ?? pool[pool.length - 1];
+      return {
+        entry,
+        html: `<img src="${getIconUrl(entry)}" width="${cssPx}" height="${cssPx}" alt="${alt}" style="width:${cssPx}px;height:${cssPx}px;object-fit:contain">`
+      };
+    }
+    function envTile(html, label, note) {
+      return `<div class="flex flex-col items-center gap-1 text-center max-w-[140px]">
+        <div>${html}</div>
+        <span class="text-[11px] break-all">${label}</span>
+        ${note ? `<span class="text-[11px] font-mono ${note.warn ? 'text-nexus-orange' : 'text-nexus-cyan'}">${note.text}</span>` : ''}
+      </div>`;
+    }
+
+    function renderTaskbar(px, dark) {
+      const barCls = dark ? 'bg-[#1b1d24] text-white' : 'bg-[#e6eaf2] text-gray-900';
+      const hoverCls = dark ? 'bg-white/10' : 'bg-black/10';
+      const slot = svg => `<div class="p-2 rounded-md">${svg}</div>`;
+      const ours = envIcon(px, px);
+      envTaskbar.className = `rounded-xl border border-nexus-border/60 px-3 flex items-center justify-between h-16 overflow-x-auto ${barCls}`;
+      envTaskbar.innerHTML = `
+        <div class="flex items-center gap-1">
+          ${slot(ENV_ICONS.start(px))}${slot(ENV_ICONS.folder(px))}${slot(ENV_ICONS.globe(px))}
+          <div class="relative p-2 rounded-md ${hoverCls}" title="Nexus_Engine.exe">${ours.html}
+            <span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-3 h-1 rounded-full bg-nexus-cyan"></span></div>
+          ${slot(ENV_ICONS.terminal(px))}${slot(ENV_ICONS.gear(px))}
+        </div>
+        <div class="text-[11px] font-mono opacity-80 pl-4 whitespace-nowrap">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+      const sourceLabel = exportFormat.value === 'ico' ? 'del .ico' : 'del conjunto PNG';
+      envTbNote.textContent = `Para ${px} px se usará la entrada de ${ours.entry} px ${sourceLabel}` +
+        (ours.entry !== px ? ' (se reescala; considera añadir ese tamaño).' : '.');
+    }
+
+    function renderExplorer(dark) {
+      const panelCls = dark ? 'bg-[#20232c] text-gray-200' : 'bg-white text-gray-800';
+      envExplorer.innerHTML = EXPLORER_VIEWS.map(v => {
+        const o = envIcon(v.px, v.css, '');
+        const note = { text: `usa ${o.entry} px`, warn: o.entry !== v.px };
+        return `<div class="space-y-1">
+          <span class="text-[11px] font-mono text-nexus-muted">${v.label} · ${v.px} px</span>
+          <div class="flex items-end gap-5 flex-wrap rounded-lg border border-nexus-border/60 p-3 ${panelCls}">
+            ${envTile(ENV_ICONS.folder(v.css), 'Proyectos')}
+            ${envTile(ENV_ICONS.doc(v.css), 'notas.txt')}
+            ${envTile(ENV_ICONS.app(v.css), 'setup.exe')}
+            ${envTile(o.html, 'Nexus_Engine.exe', note)}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function refreshEnvironments() {
+      if (!appState.sourceImage || !currentPrep) return;
+      const px = parseInt(envTbSize.value, 10);
+      const dark = envTheme.value === 'dark';
+      renderTaskbar(px, dark);
+      renderExplorer(dark);
+    }
+
+    envTbSize.addEventListener('change', () => { refreshEnvironments(); persistSettings(); });
+    envTheme.addEventListener('change', () => { refreshEnvironments(); persistSettings(); });
+    exportName.addEventListener('input', () => { updateExportNameHint(); persistSettings(); });
+    exportFormat.addEventListener('change', () => { updateSizeNote(); refreshEnvironments(); persistSettings(); updateExportState(); });
+
+    function updateSizeNote() {
+      sizeNote.textContent = exportFormat.value === 'ico'
+        ? 'El .ICO incluye siempre los 15 tamaños; esta selección solo aplica al modo PNG.'
+        : 'Modo PNG: se exportan solo los tamaños marcados.';
+    }
+
+    /* Diálogo de atajos + listeners de teclado */
+    btnShortcuts.addEventListener('click', () => {
+      shortcutsDialog.showModal();
+      track('open_shortcuts');
+      if (window.innerWidth < 768) setHeaderMenuOpen(false);
+    });
+    btnCloseShortcuts.addEventListener('click', () => shortcutsDialog.close());
+    shortcutsDialog.addEventListener('click', (e) => { if (e.target === shortcutsDialog) shortcutsDialog.close(); });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btnHeaderToggle.getAttribute('aria-expanded') === 'true') {
+        setHeaderMenuOpen(false);
+        btnHeaderToggle.focus();
+        return;
+      }
+
+      const tag = (e.target && e.target.tagName) || '';
+      const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable);
+      const mod = e.ctrlKey || e.metaKey;
+
+      if (e.key === '?' && !isTyping && !mod) {
+        e.preventDefault();
+        shortcutsDialog.showModal();
+        return;
+      }
+
+      if (!mod || isTyping) return;
+      const k = e.key.toLowerCase();
+      if (k === 'o') { e.preventDefault(); fileInput.click(); }
+      else if (k === 'e') { e.preventDefault(); if (!btnExport.disabled) btnExport.click(); }
+      else if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+      else if (k === 'z' && e.shiftKey) { e.preventDefault(); redo(); }
+    });
+
+    /* Bootstrap */
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = storage.loadState(THEME_KEY);
+      const preferred = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      applyTheme(preferred);
+
+      loadTelemetryPreference();
+      setOriginalPreviewCollapsed(storage.loadState(ORIGINAL_PREVIEW_COLLAPSED_KEY) === true, false);
+
+      const legacy = storage.loadState('session_state');
+      const saved = storage.loadState('settings') || legacy;
+      if (saved) {
+        if (Array.isArray(saved.selectedSizes)) appState.selectedSizes = saved.selectedSizes.filter(s => STANDARD_SIZES.includes(s));
+        if (saved.crop) appState.crop = { ...DEFAULT_CROP, ...saved.crop };
+        if (saved.filters) appState.filters = { ...DEFAULT_FILTERS, ...saved.filters };
+        if (saved.fit === 'cover' || saved.fit === 'contain') appState.fit = saved.fit;
+        if (saved.env) {
+          if ([...envTbSize.options].some(o => o.value === String(saved.env.taskbarSize))) envTbSize.value = String(saved.env.taskbarSize);
+          if (['dark', 'light'].includes(saved.env.theme)) envTheme.value = saved.env.theme;
+        }
+        if (saved.exportName) exportName.value = sanitizeFileName(saved.exportName);
+        if (['ico', 'png'].includes(saved.exportFormat)) exportFormat.value = saved.exportFormat;
+      }
+      syncSliders();
+      applyFitModeUI(appState.fit);
+      updateSizeNote();
+      updateExportNameHint();
+      renderSizeGrid();
+      initHistory();
+      updateExportState();
+      const source = storage.loadState('source') || (legacy && legacy.sourceDataUrl);
+      if (source) handleImageLoad(source, false);
+    });
+  </script>
+</body>
+
+</html>
